@@ -101,6 +101,10 @@ window.pjpkApp = (function () {
 
     // Animate out old
     if (old) {
+      // Pause any video in the outgoing slide
+      if (typeof old._cleanupVideo === 'function') old._cleanupVideo();
+      const vid = old.querySelector('video');
+      if (vid) vid.pause();
       old.style.transition = 'opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1)';
       old.style.opacity = '0';
       old.style.transform = dir === 'next' ? 'translateX(-28px)' : 'translateX(28px)';

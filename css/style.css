@@ -225,23 +225,23 @@ body::before {
 }
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #FCD34D, #F59E0B);
+  background: linear-gradient(90deg, #93c5fd, #3b82f6);
   width: 0%;
   transition: width .55s var(--ease);
   position: relative;
-  box-shadow: 0 0 6px rgba(252,211,77,.6);
+  box-shadow: 0 0 6px rgba(59,130,246,.5);
 }
 .progress-bar-fill::after {
   content: '';
   position: absolute;
-  right: -4px;
+  right: -3px;
   top: 50%;
   transform: translateY(-50%);
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #FCD34D;
-  box-shadow: 0 0 5px rgba(252,211,77,.8);
+  background: #93c5fd;
+  box-shadow: 0 0 5px rgba(147,197,253,.8);
 }
 .progress-label {
   position: absolute;
@@ -1352,4 +1352,43 @@ body::before {
   .s1-divider    { display: none; }
   .s1-modul-label{ display: none; }
   .s1-footer-brands { display: none; }
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE VIDEO — full-stage video player
+   ═══════════════════════════════════════════════ */
+.slide--video-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  position: relative;
+}
+.slide--video-player {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: block;
+  object-fit: contain;
+  background: #000;
+  /* Custom controls colour via accent-color */
+  accent-color: #3b82f6;
+}
+.slide--video-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: clamp(5px, 0.9vh, 9px) clamp(10px, 1.8vw, 16px);
+  background: #0f172a;
+  color: rgba(255,255,255,0.6);
+  font-size: clamp(0.58rem, 1.1vh, 0.68rem);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+/* Override slide padding for video slide so video fills edge-to-edge */
+.slide:has(.slide--video-wrap) {
+  padding: 0 !important;
+  overflow: hidden;
 }

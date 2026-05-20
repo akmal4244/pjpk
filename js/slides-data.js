@@ -122,43 +122,36 @@ const slides = [
   /* ───────────────────────────── SLIDE 2 ── */
   {
     no: 2,
-    type: "intro",
+    type: "video",
     animation: "fade",
-    title: "Maklumat Penataran",
-    objective: "Memaklumkan peserta tentang maklumat asas sesi penataran.",
-    vo: "Penataran ini dianjurkan oleh Bahagian Pembangunan Kurikulum, Kementerian Pendidikan Malaysia. Sesi ini akan berlangsung sepanjang hari bagi memastikan guru dan peserta memahami sepenuhnya Kurikulum Persekolahan 2027 bagi mata pelajaran PJPK Tingkatan 1.",
-    interaction: ["Tekan butang Seterusnya untuk meneruskan"],
-    notes: "Slide maklumat penataran — tarikh, masa, fasilitator.",
+    title: "Video Penataran KP2027",
+    objective: "Menonton video pengenalan Penataran Kurikulum Persekolahan 2027 PJPK Tingkatan 1.",
+    vo: "",
+    interaction: ["Tonton video hingga tamat", "Tekan Seterusnya apabila selesai"],
+    notes: "Slide video — Media1.mp4 dipaparkan penuh.",
     render: function(el) {
       el.innerHTML = `
-        <div class="objective-strip"><span class="objective-strip__icon">🎯</span><span>${this.objective}</span></div>
-        <h2 class="slide-title">📋 Maklumat Penataran</h2>
-        <div class="slide-body">
-          <div class="card-grid card-grid--2" style="gap:10px">
-            ${[
-              { icon: '📅', label: 'Tarikh', value: 'Mengikut Jadual Penataran' },
-              { icon: '🕗', label: 'Masa', value: '8:00 pagi — 5:00 petang' },
-              { icon: '👨‍🏫', label: 'Fasilitator', value: 'Guru Pakar PJPK BPK' },
-              { icon: '🏛️', label: 'Anjuran', value: 'Bahagian Pembangunan Kurikulum (BPK), KPM' },
-            ].map(i => `
-              <div class="content-card" style="display:flex;gap:12px;align-items:flex-start">
-                <span style="font-size:1.8rem">${i.icon}</span>
-                <div><div class="card-label">${i.label}</div><div class="card-desc">${i.value}</div></div>
-              </div>
-            `).join('')}
+        <div class="slide--video-wrap">
+          <video
+            id="slide2-video"
+            class="slide--video-player"
+            src="assets/media1.mp4"
+            controls
+            preload="metadata"
+            playsinline
+            aria-label="Video Penataran KP2027 PJPK Tingkatan 1"
+          >
+            Pelayar anda tidak menyokong video HTML5.
+          </video>
+          <div class="slide--video-label">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/></svg>
+            Video Penataran — Kurikulum Persekolahan 2027 PJPK Tingkatan 1
           </div>
-          <div class="content-card" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-color:#F59E0B">
-            <div style="display:flex;gap:10px;align-items:center">
-              <span style="font-size:1.5rem">⚠️</span>
-              <div>
-                <div class="card-label" style="color:#92400E">Penting: Menelusuri Dokumen KP2027</div>
-                <div class="card-desc" style="color:#78350F">Pastikan anda telah memuat turun dan membaca Dokumen Kurikulum PJPK Tingkatan 1 sebelum sesi bermula.</div>
-              </div>
-            </div>
-          </div>
-          <div class="vo-box"><span class="vo-box__icon">🔊</span><span>${this.vo}</span></div>
         </div>
       `;
+      // Pause video when navigating away
+      const vid = el.querySelector('#slide2-video');
+      if (vid) { el._cleanupVideo = () => vid.pause(); }
     }
   },
 
