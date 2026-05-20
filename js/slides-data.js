@@ -246,15 +246,6 @@ const slides = [
 
           <!-- RIGHT: Teacher character + thought bubble -->
           <div class="s3-right">
-            <div class="s3-thought" id="s3-thought">
-              <svg viewBox="0 0 130 65" fill="none" class="s3-cloud">
-                <ellipse cx="65" cy="28" rx="56" ry="22" fill="white" stroke="#d1d5db" stroke-width="1.8"/>
-                <ellipse cx="28" cy="46" rx="9"  ry="7"  fill="white" stroke="#d1d5db" stroke-width="1.5"/>
-                <ellipse cx="18" cy="54" rx="5.5" ry="4.5" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
-                <ellipse cx="11" cy="59" rx="3.5" ry="3" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
-                <text x="65" y="33" text-anchor="middle" font-size="18" font-family="sans-serif">🤔</text>
-              </svg>
-            </div>
             ${teacherSVG}
           </div>
 
@@ -264,7 +255,6 @@ const slides = [
       // Interaction logic
       const replyBox   = el.querySelector('#s3-reply');
       const replyInner = el.querySelector('#s3-reply-inner');
-      const thoughtEl  = el.querySelector('#s3-thought');
       const btns       = el.querySelectorAll('.s3-choice-btn');
 
       btns.forEach(btn => {
@@ -277,11 +267,6 @@ const slides = [
             b.classList.toggle('s3-choice-btn--selected', b.dataset.key === key);
             b.classList.toggle('s3-choice-btn--dim', b.dataset.key !== key);
           });
-
-          // Update thought bubble emoji
-          const thoughtSVGtext = thoughtEl.querySelector('text');
-          const emojiMap = { a:'😄', b:'🤔', c:'😊', d:'💪' };
-          if (thoughtSVGtext) thoughtSVGtext.textContent = emojiMap[key] || '😊';
 
           // Show reply
           replyInner.textContent = data.reply;
