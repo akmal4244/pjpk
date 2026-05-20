@@ -18,27 +18,42 @@ const slides = [
     render: function(el) {
       el.className = "slide slide--intro active";
       el.dataset.anim = "morph";
+      // Add floating particles
+      const particleColors = ['rgba(252,211,77,0.5)','rgba(255,255,255,0.3)','rgba(147,197,253,0.4)'];
+      let particles = '';
+      for(let i=0;i<12;i++){
+        const size = 4 + Math.random()*6;
+        const left = Math.random()*100;
+        const delay = Math.random()*8;
+        const dur = 6 + Math.random()*6;
+        const color = particleColors[Math.floor(Math.random()*3)];
+        particles += `<div class="particle" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*30}%;background:${color};animation-duration:${dur}s;animation-delay:${delay}s"></div>`;
+      }
       el.innerHTML = `
-        <div class="intro-logo-wrap">
-          <svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg" width="200" height="80">
-            <rect width="200" height="80" rx="10" fill="rgba(255,255,255,0.1)"/>
-            <circle cx="30" cy="40" r="20" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
-            <path d="M22 40h16M30 32v16" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
-            <text x="60" y="30" fill="white" font-size="11" font-family="Arial" font-weight="700">KEMENTERIAN</text>
-            <text x="60" y="44" fill="white" font-size="11" font-family="Arial" font-weight="700">PENDIDIKAN</text>
-            <text x="60" y="58" fill="white" font-size="11" font-family="Arial" font-weight="700">MALAYSIA</text>
-            <text x="60" y="72" fill="#FCD34D" font-size="8" font-family="Arial">Bahagian Pembangunan Kurikulum</text>
+        ${particles}
+        <div class="intro-logo-ring">
+          <svg viewBox="0 0 56 56" fill="none" width="52" height="52">
+            <circle cx="28" cy="28" r="26" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+            <rect x="16" y="18" width="24" height="3" rx="1.5" fill="white" opacity="0.9"/>
+            <rect x="16" y="25" width="24" height="3" rx="1.5" fill="white" opacity="0.9"/>
+            <rect x="16" y="32" width="16" height="3" rx="1.5" fill="white" opacity="0.9"/>
+            <circle cx="38" cy="35" r="7" fill="#FCD34D"/>
+            <path d="M35.5 35l2 2 3-3" stroke="#1e3a8a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h1 class="intro-title">Penataran Kurikulum Persekolahan 2027</h1>
+        <h1 class="intro-title">Penataran<br/>Kurikulum Persekolahan 2027</h1>
         <p class="intro-sub">Pendidikan Jasmani dan Pendidikan Kesihatan (PJPK)<br/>Tingkatan 1</p>
         <div class="intro-badges">
           <span class="intro-badge">🏫 KPM</span>
           <span class="intro-badge">📚 BPK</span>
           <span class="intro-badge">🎓 Tingkatan 1</span>
           <span class="intro-badge">⚽ PJPK</span>
+          <span class="intro-badge">30 Slide</span>
         </div>
-        <button class="btn-mula" id="btn-mula-main">▶ Mula</button>
+        <button class="btn-mula" id="btn-mula-main">▶&nbsp; Mula Sekarang</button>
+        <div style="margin-top:16px;font-size:0.68rem;color:rgba(255,255,255,0.45);animation:fadeIn 0.6s 0.8s both;letter-spacing:0.04em">
+          Gunakan ← → atau swipe untuk navigasi
+        </div>
       `;
       el.querySelector('#btn-mula-main').addEventListener('click', () => window.pjpkApp.goToSlide(2));
     }

@@ -1,148 +1,145 @@
 /* ═══════════════════════════════════════════════
-   PJPK KP2027 — App Engine
-   Navigation, localStorage, progress, render
+   PJPK KP2027 — App Engine v2
    ═══════════════════════════════════════════════ */
 
 /* ─── Storage Layer ─── */
 window.pjpkStorage = {
-  prefix: 'pjpk.',
-
-  // Last Slide
-  getLastSlide() { return parseInt(localStorage.getItem('pjpk.lastSlide')) || 1; },
+  getLastSlide()  { return parseInt(localStorage.getItem('pjpk.lastSlide')) || 1; },
   setLastSlide(n) { localStorage.setItem('pjpk.lastSlide', n); },
-
-  // Audio
-  getAudio() { return localStorage.getItem('pjpk.audio') || 'off'; },
-  setAudio(v) { localStorage.setItem('pjpk.audio', v); },
-
-  // Completed slides
+  getAudio()      { return localStorage.getItem('pjpk.audio') || 'off'; },
+  setAudio(v)     { localStorage.setItem('pjpk.audio', v); },
   getCompleted() {
-    try { return JSON.parse(localStorage.getItem('pjpk.completed')) || []; }
-    catch { return []; }
+    try { return JSON.parse(localStorage.getItem('pjpk.completed')) || []; } catch { return []; }
   },
   addCompleted(n) {
     const c = this.getCompleted();
     if (!c.includes(n)) { c.push(n); localStorage.setItem('pjpk.completed', JSON.stringify(c)); }
   },
-
-  // Quiz answers
-  getQuiz(slideNo) {
+  getQuiz(no) {
+    try { const q = JSON.parse(localStorage.getItem('pjpk.quiz')) || {}; return q[no] !== undefined ? q[no] : null; } catch { return null; }
+  },
+  getQuizCorrect(no) {
+    try { const q = JSON.parse(localStorage.getItem('pjpk.quizCorrect')) || {}; return q[no] === true; } catch { return false; }
+  },
+  setQuiz(no, key, ok) {
     try {
       const q = JSON.parse(localStorage.getItem('pjpk.quiz')) || {};
-      return q[slideNo] !== undefined ? q[slideNo] : null;
-    } catch { return null; }
-  },
-  getQuizCorrect(slideNo) {
-    try {
-      const q = JSON.parse(localStorage.getItem('pjpk.quizCorrect')) || {};
-      return q[slideNo] === true;
-    } catch { return false; }
-  },
-  setQuiz(slideNo, key, isCorrect) {
-    try {
-      const q = JSON.parse(localStorage.getItem('pjpk.quiz')) || {};
-      q[slideNo] = key;
-      localStorage.setItem('pjpk.quiz', JSON.stringify(q));
+      q[no] = key; localStorage.setItem('pjpk.quiz', JSON.stringify(q));
       const qc = JSON.parse(localStorage.getItem('pjpk.quizCorrect')) || {};
-      qc[slideNo] = isCorrect;
-      localStorage.setItem('pjpk.quizCorrect', JSON.stringify(qc));
+      qc[no] = ok; localStorage.setItem('pjpk.quizCorrect', JSON.stringify(qc));
     } catch {}
   },
-  getQuizAll() {
-    try { return JSON.parse(localStorage.getItem('pjpk.quizCorrect')) || {}; }
-    catch { return {}; }
+  getQuizAll() { try { return JSON.parse(localStorage.getItem('pjpk.quizCorrect')) || {}; } catch { return {}; } },
+  getReflection(no) { try { const r = JSON.parse(localStorage.getItem('pjpk.reflection')) || {}; return r[no] || ''; } catch { return ''; } },
+  saveReflection(no, txt) {
+    try { const r = JSON.parse(localStorage.getItem('pjpk.reflection')) || {}; r[no] = txt; localStorage.setItem('pjpk.reflection', JSON.stringify(r)); } catch {}
   },
-
-  // Reflection
-  getReflection(slideNo) {
-    try {
-      const r = JSON.parse(localStorage.getItem('pjpk.reflection')) || {};
-      return r[slideNo] || '';
-    } catch { return ''; }
-  },
-  saveReflection(slideNo, text) {
-    try {
-      const r = JSON.parse(localStorage.getItem('pjpk.reflection')) || {};
-      r[slideNo] = text;
-      localStorage.setItem('pjpk.reflection', JSON.stringify(r));
-    } catch {}
-  },
-
-  // Reset all
   resetAll() {
-    const keys = ['pjpk.lastSlide','pjpk.audio','pjpk.completed','pjpk.quiz','pjpk.quizCorrect','pjpk.reflection'];
-    keys.forEach(k => localStorage.removeItem(k));
+    ['pjpk.lastSlide','pjpk.audio','pjpk.completed','pjpk.quiz','pjpk.quizCorrect','pjpk.reflection']
+      .forEach(k => localStorage.removeItem(k));
   }
 };
 
 /* ─── Main App ─── */
 window.pjpkApp = (function () {
-  let currentSlide = 1;
   const TOTAL = 30;
+  let current = 1;
+  let transitioning = false;
 
-  /* ── Render slide ── */
-  function renderSlide(n, direction = 'next') {
-    const stage = document.getElementById('slide-stage');
-    const slideData = slides[n - 1];
-    if (!slideData) return;
-
-    // Remove existing
-    const existing = stage.querySelector('.slide');
-    if (existing) {
-      existing.classList.remove('active');
-      existing.style.opacity = '0';
-      existing.style.transform = direction === 'next' ? 'translateX(-30px)' : 'translateX(30px)';
-      setTimeout(() => existing.remove(), 380);
+  /* ── Dot nav ── */
+  function buildDots() {
+    const wrap = document.getElementById('slide-dots');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const d = document.createElement('div');
+      d.className = 'slide-dot';
+      d.dataset.slide = i;
+      d.title = `Slide ${i}`;
+      wrap.appendChild(d);
     }
+  }
 
-    // Create new slide div
+  function updateDots() {
+    const completed = pjpkStorage.getCompleted();
+    document.querySelectorAll('.slide-dot').forEach(d => {
+      const n = parseInt(d.dataset.slide);
+      d.classList.remove('visited','current');
+      if (n === current) d.classList.add('current');
+      else if (completed.includes(n)) d.classList.add('visited');
+    });
+  }
+
+  /* ── Render ── */
+  function renderSlide(n, dir = 'next') {
+    if (transitioning) return;
+    if (n < 1 || n > TOTAL) return;
+    transitioning = true;
+
+    const stage = document.getElementById('slide-stage');
+    const data  = slides[n - 1];
+    if (!data) { transitioning = false; return; }
+
+    const old = stage.querySelector('.slide');
+
+    // Create new
     const el = document.createElement('div');
     el.className = 'slide';
     el.dataset.slideNo = n;
-    el.dataset.anim = slideData.animation || 'fade';
-    el.style.opacity = '0';
-    el.style.transform = direction === 'next' ? 'translateX(30px)' : 'translateX(-30px)';
+
+    // For special slides set class before render
+    if (data.type === 'intro')   el.className = 'slide slide--intro';
+    if (data.type === 'closing') el.className = 'slide slide--closing';
 
     stage.appendChild(el);
+    data.render(el);
 
-    // Let slide render itself
-    slideData.render(el);
+    // Entrance animation
+    el.style.opacity = '0';
+    el.style.transform = dir === 'next' ? 'translateX(32px)' : 'translateX(-32px)';
+    el.style.transition = 'none';
 
-    // Animate in
+    // Animate out old
+    if (old) {
+      old.style.transition = 'opacity 0.28s ease, transform 0.28s cubic-bezier(0.4,0,0.2,1)';
+      old.style.opacity = '0';
+      old.style.transform = dir === 'next' ? 'translateX(-28px)' : 'translateX(28px)';
+      setTimeout(() => old.remove(), 300);
+    }
+
+    // Animate in new
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        el.style.transition = 'opacity 0.38s ease, transform 0.38s cubic-bezier(0.4,0,0.2,1)';
+        el.style.transition = 'opacity 0.35s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1)';
         el.style.opacity = '1';
         el.style.transform = 'translateX(0)';
         el.classList.add('active');
+        setTimeout(() => { transitioning = false; }, 360);
       });
     });
 
-    // Update state
-    currentSlide = n;
-    updateFooter();
-    updateProgress();
+    current = n;
     pjpkStorage.setLastSlide(n);
     pjpkStorage.addCompleted(n);
 
-    // Announce to screen readers
-    stage.setAttribute('aria-label', `Slide ${n} daripada ${TOTAL}: ${slideData.title}`);
+    updateFooter();
+    updateProgress();
+    updateDots();
+
+    stage.setAttribute('aria-label', `Slide ${n} daripada ${TOTAL}: ${data.title}`);
   }
 
-  /* ── Footer (Back/Next visibility) ── */
+  /* ── Footer ── */
   function updateFooter() {
     const btnBack = document.getElementById('btn-back');
     const btnNext = document.getElementById('btn-next');
-    const counter = document.getElementById('slide-current');
+    document.getElementById('slide-current').textContent = current;
 
-    counter.textContent = currentSlide;
-
-    // Slide 1 — no back
-    if (currentSlide === 1) {
+    if (current === 1) {
       btnBack.disabled = true;
       btnBack.style.opacity = '0.35';
-      btnNext.style.display = 'none'; // handled by Mula button
-    } else if (currentSlide === 30) {
+      btnNext.style.display = 'none';
+    } else if (current === 30) {
       btnBack.disabled = false;
       btnBack.style.opacity = '1';
       btnNext.style.display = 'none';
@@ -153,103 +150,91 @@ window.pjpkApp = (function () {
     }
   }
 
-  /* ── Progress bar ── */
+  /* ── Progress ── */
   function updateProgress() {
-    const completed = pjpkStorage.getCompleted();
-    const pct = Math.round((completed.length / TOTAL) * 100);
-    const bar = document.getElementById('progress-bar');
-    const label = document.getElementById('progress-label');
+    const c    = pjpkStorage.getCompleted();
+    const pct  = Math.round((c.length / TOTAL) * 100);
+    const bar  = document.getElementById('progress-bar');
+    const lbl  = document.getElementById('progress-label');
     const wrap = document.getElementById('progress-bar-wrap');
-    bar.style.width = pct + '%';
-    label.textContent = pct + '%';
-    wrap.setAttribute('aria-valuenow', pct);
+    if (bar)  bar.style.width  = pct + '%';
+    if (lbl)  lbl.textContent  = pct + '%';
+    if (wrap) wrap.setAttribute('aria-valuenow', pct);
   }
 
-  /* ── Navigation ── */
-  function next() {
-    if (currentSlide < TOTAL) renderSlide(currentSlide + 1, 'next');
-  }
-
-  function back() {
-    if (currentSlide > 1) renderSlide(currentSlide - 1, 'back');
-  }
-
-  function goToSlide(n) {
-    if (n >= 1 && n <= TOTAL) renderSlide(n, n > currentSlide ? 'next' : 'back');
-  }
-
-  function restart() {
-    pjpkStorage.resetAll();
-    renderSlide(1, 'next');
-  }
+  function next()        { if (current < TOTAL) renderSlide(current + 1, 'next'); }
+  function back()        { if (current > 1)     renderSlide(current - 1, 'back'); }
+  function goToSlide(n)  { renderSlide(n, n > current ? 'next' : 'back'); }
+  function restart()     { pjpkStorage.resetAll(); renderSlide(1, 'next'); }
 
   /* ── Toast ── */
-  function showToast(msg, duration = 2500) {
+  function showToast(msg, ms = 2600) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.remove('hidden');
-    clearTimeout(window._toastTimer);
-    window._toastTimer = setTimeout(() => t.classList.add('hidden'), duration);
+    clearTimeout(window._toastT);
+    window._toastT = setTimeout(() => t.classList.add('hidden'), ms);
   }
 
-  /* ── Popup: Bantuan ── */
-  function openBantuan() { document.getElementById('popup-bantuan').classList.remove('hidden'); }
-  function closeBantuan() { document.getElementById('popup-bantuan').classList.add('hidden'); }
-
-  /* ── Popup: Reset ── */
-  function openReset() { document.getElementById('popup-reset').classList.remove('hidden'); }
-  function closeReset() { document.getElementById('popup-reset').classList.add('hidden'); }
+  /* ── Popups ── */
+  const openBantuan  = () => document.getElementById('popup-bantuan').classList.remove('hidden');
+  const closeBantuan = () => document.getElementById('popup-bantuan').classList.add('hidden');
+  const openReset    = () => document.getElementById('popup-reset').classList.remove('hidden');
+  const closeReset   = () => document.getElementById('popup-reset').classList.add('hidden');
 
   /* ── INIT ── */
   function init() {
-    // Set total
     document.getElementById('slide-total').textContent = TOTAL;
+    buildDots();
 
-    // Resume last slide
     const last = pjpkStorage.getLastSlide();
+    // Pre-mark visited
+    for (let i = 1; i < last; i++) pjpkStorage.addCompleted(i);
     renderSlide(last, 'next');
 
-    // Button events
+    /* Button events */
     document.getElementById('btn-next').addEventListener('click', next);
     document.getElementById('btn-back').addEventListener('click', back);
     document.getElementById('btn-bantuan').addEventListener('click', openBantuan);
     document.getElementById('btn-reset').addEventListener('click', openReset);
     document.getElementById('close-bantuan').addEventListener('click', closeBantuan);
-    document.getElementById('confirm-reset').addEventListener('click', () => { closeReset(); restart(); showToast('🔄 Kemajuan dipadam. Bermula semula...'); });
+    document.getElementById('confirm-reset').addEventListener('click', () => {
+      closeReset(); restart(); showToast('🔄 Kemajuan dipadam. Bermula semula...');
+    });
     document.getElementById('cancel-reset').addEventListener('click', closeReset);
 
-    // Popup overlay click outside
-    document.getElementById('popup-bantuan').addEventListener('click', function(e) {
-      if (e.target === this) closeBantuan();
-    });
-    document.getElementById('popup-reset').addEventListener('click', function(e) {
-      if (e.target === this) closeReset();
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      const bantuanOpen = !document.getElementById('popup-bantuan').classList.contains('hidden');
-      const resetOpen   = !document.getElementById('popup-reset').classList.contains('hidden');
-      if (bantuanOpen) { if (e.key === 'Escape') closeBantuan(); return; }
-      if (resetOpen)   { if (e.key === 'Escape') closeReset(); return; }
-      switch (e.key) {
-        case 'ArrowRight': next(); break;
-        case 'ArrowLeft':  back(); break;
-        case ' ':
-          e.preventDefault();
-          if (currentSlide === 1) goToSlide(2);
-          else next();
-          break;
-      }
+    /* Overlay click-outside */
+    ['popup-bantuan','popup-reset'].forEach(id => {
+      document.getElementById(id).addEventListener('click', function(e) {
+        if (e.target === this) this.classList.add('hidden');
+      });
     });
 
-    // Audio init
+    /* Keyboard */
+    document.addEventListener('keydown', e => {
+      const bOpen = !document.getElementById('popup-bantuan').classList.contains('hidden');
+      const rOpen = !document.getElementById('popup-reset').classList.contains('hidden');
+      if (bOpen) { if (e.key==='Escape') closeBantuan(); return; }
+      if (rOpen) { if (e.key==='Escape') closeReset();   return; }
+      if (e.key==='ArrowRight')      next();
+      else if (e.key==='ArrowLeft')  back();
+      else if (e.key===' ') { e.preventDefault(); current===1 ? goToSlide(2) : next(); }
+    });
+
+    /* Touch swipe */
+    let touchStartX = 0;
+    const stage = document.getElementById('slide-stage');
+    stage.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 50) { dx < 0 ? next() : back(); }
+    }, { passive: true });
+
+    /* Audio */
     window.pjpkAudio.init();
   }
 
-  // Expose
-  return { init, next, back, goToSlide, restart, showToast, getCurrentSlide: () => currentSlide };
+  return { init, next, back, goToSlide, restart, showToast, getCurrentSlide: () => current };
 })();
 
-/* ─── Boot on DOM ready ─── */
 document.addEventListener('DOMContentLoaded', () => window.pjpkApp.init());

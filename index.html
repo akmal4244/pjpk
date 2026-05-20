@@ -2,149 +2,140 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Penataran KP2027 — PJPK Tingkatan 1</title>
-  <meta name="description" content="Modul Interaktif Penataran Kurikulum Persekolahan 2027 bagi mata pelajaran Pendidikan Jasmani dan Pendidikan Kesihatan (PJPK) Tingkatan 1" />
+  <meta name="description" content="Modul Interaktif Penataran KP2027 PJPK Tingkatan 1 — Pendidikan Jasmani dan Pendidikan Kesihatan" />
+  <meta name="theme-color" content="#2563EA" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body class="bg-slate-100 font-arial min-h-screen flex flex-col">
+<body>
 
-  <!-- AUDIO BGM -->
+  <!-- BGM -->
   <audio id="bgm" src="assets/bgm.mp3" loop preload="none"></audio>
 
-  <!-- ═══════════════ POPUP: BANTUAN ═══════════════ -->
-  <div id="popup-bantuan" class="popup-overlay hidden" role="dialog" aria-modal="true" aria-label="Panduan Penggunaan">
+  <!-- ══════════ POPUP: BANTUAN ══════════ -->
+  <div id="popup-bantuan" class="popup-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="bantuan-title">
     <div class="popup-box">
       <div class="popup-header">
-        <h2>📖 Panduan Penggunaan</h2>
+        <h2 id="bantuan-title">📖 Panduan Penggunaan</h2>
         <button id="close-bantuan" class="popup-close" aria-label="Tutup">✕</button>
       </div>
       <div class="popup-body">
         <div class="help-grid">
           <div class="help-item">
             <span class="help-icon">🖱️</span>
-            <div>
-              <strong>Navigasi Slide</strong>
-              <p>Gunakan butang <em>Seterusnya</em> dan <em>Kembali</em> untuk bergerak antara slide.</p>
-            </div>
+            <div><strong>Navigasi Slide</strong><p>Gunakan butang <em>Seterusnya</em> dan <em>Kembali</em>, atau klik dot navigasi di bawah.</p></div>
           </div>
           <div class="help-item">
             <span class="help-icon">⌨️</span>
-            <div>
-              <strong>Papan Kekunci</strong>
-              <p>→ Seterusnya &nbsp;|&nbsp; ← Kembali &nbsp;|&nbsp; Spacebar Mula/Next &nbsp;|&nbsp; Esc Tutup popup</p>
-            </div>
+            <div><strong>Papan Kekunci</strong><p>→ Seterusnya &nbsp;|&nbsp; ← Kembali &nbsp;|&nbsp; Spacebar Mula/Next &nbsp;|&nbsp; Esc Tutup</p></div>
           </div>
           <div class="help-item">
             <span class="help-icon">🔊</span>
-            <div>
-              <strong>Muzik Latar</strong>
-              <p>Klik ikon 🔊/🔇 di header untuk hidupkan atau matikan muzik latar belakang.</p>
-            </div>
+            <div><strong>Muzik Latar</strong><p>Klik ikon 🔊/🔇 untuk hidupkan atau matikan muzik latar belakang.</p></div>
           </div>
           <div class="help-item">
             <span class="help-icon">💾</span>
-            <div>
-              <strong>Auto-Simpan</strong>
-              <p>Kemajuan anda disimpan secara automatik. Slide terakhir akan dibuka semula apabila anda kembali.</p>
-            </div>
+            <div><strong>Auto-Simpan</strong><p>Kemajuan disimpan secara automatik. Slide terakhir akan dibuka semula apabila kembali.</p></div>
           </div>
           <div class="help-item">
             <span class="help-icon">✏️</span>
-            <div>
-              <strong>Kuiz & Refleksi</strong>
-              <p>Jawab soalan kuiz dan tulis refleksi anda. Semua jawapan disimpan secara automatik.</p>
-            </div>
+            <div><strong>Kuiz & Refleksi</strong><p>Jawab soalan kuiz dan tulis refleksi. Semua disimpan secara automatik dalam peranti anda.</p></div>
           </div>
           <div class="help-item">
             <span class="help-icon">🔄</span>
-            <div>
-              <strong>Reset Kemajuan</strong>
-              <p>Klik ikon 🗑️ untuk memadam semua kemajuan dan mulakan semula dari awal.</p>
-            </div>
+            <div><strong>Reset Kemajuan</strong><p>Klik 🗑️ untuk padam semua kemajuan dan mulakan semula dari awal.</p></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════ POPUP: RESET CONFIRM ═══════════════ -->
+  <!-- ══════════ POPUP: RESET ══════════ -->
   <div id="popup-reset" class="popup-overlay hidden" role="dialog" aria-modal="true">
     <div class="popup-box popup-box--sm">
       <div class="popup-header popup-header--warn">
         <h2>⚠️ Reset Kemajuan</h2>
       </div>
-      <div class="popup-body text-center">
-        <p class="mb-4 text-gray-700">Adakah anda pasti mahu memadam <strong>semua kemajuan</strong>?<br/>Tindakan ini tidak boleh dibatalkan.</p>
-        <div class="flex gap-3 justify-center">
-          <button id="confirm-reset" class="btn btn--danger">Ya, Padam</button>
-          <button id="cancel-reset" class="btn btn--ghost">Batal</button>
+      <div class="popup-body" style="text-align:center">
+        <div style="font-size:2.5rem;margin-bottom:10px">🗑️</div>
+        <p style="font-size:0.875rem;color:#374151;margin-bottom:16px;line-height:1.6">Adakah anda pasti mahu memadam <strong>semua kemajuan</strong>?<br/><span style="font-size:0.78rem;color:#94a3b8">Tindakan ini tidak boleh dibatalkan.</span></p>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button id="confirm-reset" class="btn btn--danger">🗑️ Ya, Padam</button>
+          <button id="cancel-reset"  class="btn btn--ghost">Batal</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════ MAIN WRAPPER ═══════════════ -->
+  <!-- ══════════ APP SHELL ══════════ -->
   <div id="app" class="app-wrapper">
 
-    <!-- ─────────── HEADER ─────────── -->
+    <!-- ─── HEADER ─── -->
     <header class="app-header" role="banner">
-      <div class="header-left">
-        <!-- Logo KPM inline SVG -->
-        <div class="kpm-logo" aria-label="Logo KPM">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
-            <circle cx="24" cy="24" r="22" fill="#fff" stroke="#2563EA" stroke-width="2"/>
-            <path d="M14 16h20v3H14zM14 22h20v3H14zM14 28h14v3H14z" fill="#2563EA"/>
-            <circle cx="34" cy="30" r="5" fill="#FCD34D"/>
-            <path d="M32 30l2 2 3-3" stroke="#2563EA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+      <div class="header-inner">
+        <div class="header-left">
+          <div class="kpm-badge" aria-label="KPM">
+            <svg viewBox="0 0 36 36" fill="none" width="26" height="26">
+              <circle cx="18" cy="18" r="16" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+              <rect x="10" y="11" width="16" height="2.5" rx="1.2" fill="white" opacity="0.9"/>
+              <rect x="10" y="16" width="16" height="2.5" rx="1.2" fill="white" opacity="0.9"/>
+              <rect x="10" y="21" width="11" height="2.5" rx="1.2" fill="white" opacity="0.9"/>
+              <circle cx="26" cy="23" r="4" fill="#FCD34D"/>
+              <path d="M24.5 23l1.2 1.2 2-2" stroke="#1e3a8a" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="header-title">
+            <span class="header-title__main">Penataran KP2027</span>
+            <span class="header-title__sub">PJPK Tingkatan 1 — BPK, KPM</span>
+          </div>
         </div>
-        <div class="header-title">
-          <span class="header-title__main">Penataran KP2027</span>
-          <span class="header-title__sub">PJPK Tingkatan 1</span>
+        <div class="header-right">
+          <button id="btn-audio"   class="icon-btn" title="Toggle Muzik"    aria-label="Toggle Muzik Latar">🔇</button>
+          <button id="btn-bantuan" class="icon-btn" title="Bantuan"         aria-label="Bantuan">❓</button>
+          <button id="btn-reset"   class="icon-btn" title="Reset Kemajuan"  aria-label="Reset Kemajuan">🗑️</button>
         </div>
       </div>
-      <div class="header-right">
-        <button id="btn-audio" class="icon-btn" title="Toggle Muzik" aria-label="Toggle Muzik Latar">🔇</button>
-        <button id="btn-bantuan" class="icon-btn" title="Bantuan" aria-label="Bantuan">❓</button>
-        <button id="btn-reset" class="icon-btn" title="Reset Kemajuan" aria-label="Reset Kemajuan">🗑️</button>
-      </div>
-      <!-- Progress Bar -->
       <div class="progress-bar-wrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-bar-wrap">
         <div id="progress-bar" class="progress-bar-fill"></div>
         <span id="progress-label" class="progress-label">0%</span>
       </div>
     </header>
 
-    <!-- ─────────── SLIDE STAGE ─────────── -->
-    <main id="slide-stage" class="slide-stage" role="main" aria-live="polite">
-      <!-- Slides rendered dynamically by app.js -->
-    </main>
+    <!-- ─── SLIDE STAGE ─── -->
+    <main id="slide-stage" class="slide-stage" role="main" aria-live="polite" aria-label="Kandungan Slide"></main>
 
-    <!-- ─────────── FOOTER NAV ─────────── -->
+    <!-- ─── FOOTER ─── -->
     <footer class="app-footer" role="navigation" aria-label="Navigasi Slide">
-      <button id="btn-back" class="nav-btn nav-btn--back" aria-label="Slide sebelumnya">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/></svg>
+      <button id="btn-back" class="nav-btn nav-btn--back" aria-label="Slide sebelumnya" disabled>
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/></svg>
         Kembali
       </button>
-      <div class="slide-counter">
-        <span id="slide-current">1</span>
-        <span class="divider">/</span>
-        <span id="slide-total">30</span>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px">
+        <div class="slide-counter">
+          <span id="slide-current">1</span>
+          <span class="divider">/</span>
+          <span id="slide-total">30</span>
+        </div>
+        <div class="slide-dots" id="slide-dots" aria-hidden="true"></div>
       </div>
-      <button id="btn-next" class="nav-btn nav-btn--next" aria-label="Slide seterusnya">
+
+      <button id="btn-next" class="nav-btn nav-btn--next" aria-label="Slide seterusnya" style="display:none">
         Seterusnya
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"/></svg>
       </button>
     </footer>
 
-  </div><!-- /#app -->
+  </div>
 
-  <!-- ═══════════════ TOAST NOTIFICATION ═══════════════ -->
+  <!-- Toast -->
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
-  <!-- ═══════════════ SCRIPTS ═══════════════ -->
+  <!-- Scripts -->
   <script src="js/slides-data.js"></script>
   <script src="js/interactions.js"></script>
   <script src="js/audio.js"></script>
