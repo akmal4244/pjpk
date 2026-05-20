@@ -137,17 +137,16 @@ body::before {
 .header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
 .header-right { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
 
-.kpm-badge {
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: var(--r-md);
-  width: clamp(32px,4.5vw,42px);
-  height: clamp(32px,4.5vw,42px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Jata Negara in header */
+.header-jata {
+  height: clamp(34px, 5.5vh, 52px);
+  width: auto;
   flex-shrink: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.25));
 }
+/* Keep kpm-badge rule for backward compat (hidden now) */
+.kpm-badge { display: none; }
 
 .header-title { display: flex; flex-direction: column; min-width: 0; }
 .header-title__main {
@@ -168,22 +167,54 @@ body::before {
   text-overflow: ellipsis;
 }
 
-.icon-btn {
+/* Header action buttons — SVG icon style */
+.hdr-btn {
   background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.20);
   border-radius: var(--r-sm);
-  width: clamp(28px,3.5vw,34px);
-  height: clamp(28px,3.5vw,34px);
+  width: clamp(28px, 3.8vh, 36px);
+  height: clamp(28px, 3.8vh, 36px);
   cursor: pointer;
-  font-size: clamp(0.78rem,1.4vw,1rem);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .2s, transform .15s;
-  color: var(--white);
+  transition: background .18s, transform .15s, box-shadow .18s;
+  color: rgba(255,255,255,0.88);
+  flex-shrink: 0;
 }
-.icon-btn:hover { background: rgba(255,255,255,0.26); transform: translateY(-1px); }
-.icon-btn:active { transform: scale(0.92); }
+.hdr-btn:hover {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.hdr-btn:active { transform: scale(0.93); }
+.hdr-btn--active {
+  background: rgba(255,255,255,0.22);
+  color: #FCD34D;
+  border-color: rgba(252,211,77,0.35);
+}
+.hdr-btn--danger:hover {
+  background: rgba(239,68,68,0.35);
+  border-color: rgba(239,68,68,0.5);
+  color: #fca5a5;
+}
+/* Progress badge */
+.hdr-progress-badge {
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: clamp(0.58rem, 1.2vh, 0.7rem);
+  font-weight: 800;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.03em;
+  min-width: 34px;
+  text-align: center;
+  flex-shrink: 0;
+}
+/* Legacy icon-btn kept for any old references */
+.icon-btn { display: none; }
 
 .progress-bar-wrap {
   height: 3px;
@@ -935,17 +966,36 @@ body::before {
 .nav-btn--next:disabled { opacity: .35; cursor: default; }
 .nav-btn:active:not(:disabled) { transform: scale(0.96) !important; }
 
+/* Footer center — dots + counter stacked */
+.footer-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
 .slide-counter {
   display: flex;
   align-items: center;
-  gap: 3px;
-  font-size: clamp(0.8rem,1.6vh,0.9rem);
-  font-weight: 800;
-  color: var(--blue);
-  letter-spacing: -0.01em;
+  gap: 4px;
+  font-size: clamp(0.68rem, 1.3vh, 0.78rem);
+  font-weight: 600;
+  color: var(--slate-500);
+  letter-spacing: 0.01em;
+  background: var(--slate-100);
+  border: 1px solid var(--slate-200);
+  border-radius: 999px;
+  padding: 2px 10px;
 }
-.slide-counter .divider { color: var(--slate-300); font-weight: 400; }
-#slide-total { color: var(--slate-400); font-weight: 500; font-size: 0.82rem; }
+.slide-counter__num {
+  font-weight: 900;
+  color: var(--blue);
+  font-size: clamp(0.75rem, 1.5vh, 0.88rem);
+}
+.slide-counter__sep { color: var(--slate-300); }
+.slide-counter__total { color: var(--slate-400); font-weight: 500; }
 
 /* Dots */
 .slide-dots { display: flex; gap: 3px; align-items: center; flex-wrap: wrap; max-width: 160px; justify-content: center; }
