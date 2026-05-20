@@ -159,37 +159,129 @@ const slides = [
   {
     no: 3,
     type: "reflection",
-    animation: "peel",
-    title: "Refleksi: Video Pembuka",
+    animation: "fade",
+    title: "Apakah reaksi anda berkenaan video tersebut?",
     objective: "Merangsang pemikiran kritis peserta berkaitan video pembuka.",
-    vo: "Sila tonton video pembuka yang telah dipaparkan. Setelah menonton, kongsikan refleksi anda dalam kotak yang disediakan. Tiada jawapan yang salah — ini adalah peluang untuk anda meluahkan pandangan dan perasaan anda.",
-    interaction: ["Taip refleksi anda", "Klik Simpan Refleksi"],
-    notes: "Slide refleksi — kotak teks untuk pengguna tulis.",
+    vo: "Sila kongsikan reaksi dan perasaan anda berkenaan video yang baru ditonton. Tulis refleksi anda dalam kotak yang disediakan.",
+    interaction: ["Taip refleksi anda", "Klik Simpan"],
+    notes: "Slide refleksi — layout faithful kepada PPTX slide 3.",
     render: function(el) {
+      el.className = "slide slide--s3 active";
       const saved = window.pjpkStorage.getReflection(3);
+
       el.innerHTML = `
-        <div class="objective-strip"><span class="objective-strip__icon">🎯</span><span>${this.objective}</span></div>
-        <h2 class="slide-title">💭 Refleksi: Video Pembuka</h2>
-        <div class="slide-body">
-          <div style="background:linear-gradient(135deg,#6D28D9,#7C3AED);border-radius:14px;padding:20px;color:#fff;text-align:center">
-            <div style="font-size:3rem;margin-bottom:8px">🎬</div>
-            <div style="font-size:1rem;font-weight:700;margin-bottom:4px">Video Pembuka Telah Ditayangkan</div>
-            <div style="font-size:0.8rem;opacity:0.85">Sila berikan refleksi anda berdasarkan video yang ditonton</div>
-          </div>
-          <div class="reflection-wrap">
-            <div class="reflection-prompt">
-              <span>❓</span>
-              <span>Apakah <strong>reaksi</strong> dan <strong>perasaan</strong> anda berkenaan video tersebut? Apakah yang bermakna bagi anda?</span>
+        <!-- White background with subtle top border -->
+        <div class="s3-wrap">
+
+          <!-- LEFT: Question + textarea -->
+          <div class="s3-left">
+
+            <!-- Big question -->
+            <div class="s3-question">
+              <span class="s3-q-text">Apakah reaksi anda<br/>berkenaan video tersebut?</span>
             </div>
-            <textarea id="reflection-3" class="reflection-textarea" placeholder="Tulis refleksi anda di sini... (contoh: Saya rasa teruja dengan pendekatan baru PJPK KP2027 kerana...)" rows="5">${saved || ''}</textarea>
-            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-              <button class="btn-save-reflection" onclick="window.pjpkStorage.saveReflection(3, document.getElementById('reflection-3').value); document.getElementById('reflection-saved-3').classList.add('show'); window.pjpkApp.showToast('✅ Refleksi disimpan!')">💾 Simpan Refleksi</button>
-              <div id="reflection-saved-3" class="reflection-saved-msg ${saved ? 'show' : ''}">✅ Refleksi disimpan!</div>
+
+            <!-- Textarea reflection -->
+            <div class="s3-reflect-area">
+              <textarea
+                id="reflection-3"
+                class="s3-textarea"
+                placeholder="Tulis reaksi dan refleksi anda di sini..."
+                spellcheck="false"
+              >${saved || ''}</textarea>
+              <div class="s3-actions">
+                <button class="s3-save-btn" id="s3-save">
+                  <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293z"/></svg>
+                  Simpan Refleksi
+                </button>
+                <span class="s3-saved-msg ${saved ? 'show' : ''}" id="s3-saved">&#10003; Disimpan</span>
+              </div>
             </div>
+
+            <!-- Branding bottom left -->
+            <div class="s3-brand">#kurikulumkita</div>
           </div>
-          <div class="vo-box"><span class="vo-box__icon">🔊</span><span>${this.vo}</span></div>
+
+          <!-- RIGHT: Character illustration -->
+          <div class="s3-right" aria-hidden="true">
+
+            <!-- Thought bubble -->
+            <div class="s3-thought">
+              <svg viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="s3-cloud">
+                <ellipse cx="60" cy="28" rx="52" ry="24" fill="white" stroke="#d1d5db" stroke-width="2"/>
+                <ellipse cx="28" cy="46" rx="10" ry="8" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
+                <ellipse cx="18" cy="54" rx="6" ry="5" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
+                <ellipse cx="10" cy="58" rx="4" ry="3.5" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
+              </svg>
+            </div>
+
+            <!-- Teacher character SVG -->
+            <svg class="s3-character" viewBox="0 0 220 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Shadow -->
+              <ellipse cx="110" cy="415" rx="70" ry="8" fill="rgba(0,0,0,0.08)"/>
+              <!-- Body / shirt (blue raglan) -->
+              <path d="M60 200 C50 210 42 240 40 290 L50 292 C52 260 58 235 65 218Z" fill="#1d4ed8"/>
+              <path d="M160 200 C170 210 178 240 180 290 L170 292 C168 260 162 235 155 218Z" fill="#1d4ed8"/>
+              <path d="M65 215 L155 215 L165 295 L55 295 Z" fill="#3b82f6"/>
+              <!-- Raglan sleeves -->
+              <path d="M65 215 L45 255 L52 258 L70 222Z" fill="#93c5fd"/>
+              <path d="M155 215 L175 255 L168 258 L150 222Z" fill="#93c5fd"/>
+              <!-- Collar -->
+              <path d="M95 215 L110 228 L125 215 L115 210 L105 210Z" fill="white"/>
+              <!-- Name tag -->
+              <rect x="100" y="245" width="22" height="14" rx="2" fill="#1e3a8a"/>
+              <!-- Pants (dark blue) -->
+              <path d="M55 295 L165 295 L168 390 L148 390 L110 330 L72 390 L52 390 Z" fill="#1e3a8a"/>
+              <!-- Shoes -->
+              <ellipse cx="72" cy="393" rx="20" ry="8" fill="#111827"/>
+              <ellipse cx="148" cy="393" rx="20" ry="8" fill="#111827"/>
+              <!-- Left arm open / gesturing -->
+              <path d="M52 258 C35 270 18 285 15 305 C12 318 22 324 30 318 C38 312 50 295 60 280 L52 258Z" fill="#f97316" opacity="0.85"/>
+              <path d="M52 258 C35 270 18 285 15 305 C12 318 22 324 30 318 C38 312 50 295 60 280 L52 258Z" fill="#3b82f6"/>
+              <!-- Right arm open / gesturing -->
+              <path d="M168 258 C185 270 202 285 205 305 C208 318 198 324 190 318 C182 312 170 295 160 280 L168 258Z" fill="#3b82f6"/>
+              <!-- Left hand -->
+              <ellipse cx="20" cy="316" rx="12" ry="9" fill="#fbbf24" opacity="0"/>
+              <ellipse cx="18" cy="318" rx="11" ry="8" fill="#fed7aa"/>
+              <!-- Right hand -->
+              <ellipse cx="202" cy="318" rx="11" ry="8" fill="#fed7aa"/>
+              <!-- Neck -->
+              <rect x="100" y="175" width="20" height="28" rx="8" fill="#fed7aa"/>
+              <!-- Head -->
+              <ellipse cx="110" cy="155" rx="42" ry="46" fill="#fed7aa"/>
+              <!-- Hair -->
+              <path d="M70 138 C72 100 148 100 150 138 C145 118 115 112 110 112 C105 112 75 118 70 138Z" fill="#1c1917"/>
+              <path d="M68 138 C65 128 68 110 80 104 C75 108 70 120 70 138Z" fill="#1c1917"/>
+              <path d="M152 138 C155 128 152 110 140 104 C145 108 150 120 150 138Z" fill="#1c1917"/>
+              <!-- Eyes -->
+              <ellipse cx="95" cy="152" rx="6" ry="7" fill="white"/>
+              <ellipse cx="125" cy="152" rx="6" ry="7" fill="white"/>
+              <ellipse cx="96" cy="153" rx="3.5" ry="4" fill="#1c1917"/>
+              <ellipse cx="126" cy="153" rx="3.5" ry="4" fill="#1c1917"/>
+              <!-- Eyebrows -->
+              <path d="M88 143 C91 140 100 140 103 142" stroke="#1c1917" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M118 142 C121 140 130 140 133 143" stroke="#1c1917" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Smile -->
+              <path d="M95 168 C102 178 118 178 125 168" stroke="#b45309" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <!-- Watch -->
+              <rect x="153" y="270" width="14" height="9" rx="3" fill="#374151"/>
+            </svg>
+          </div>
+
         </div>
       `;
+
+      // Save button logic
+      const saveBtn = el.querySelector('#s3-save');
+      const savedMsg = el.querySelector('#s3-saved');
+      const ta = el.querySelector('#reflection-3');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          window.pjpkStorage.saveReflection(3, ta.value);
+          savedMsg.classList.add('show');
+          window.pjpkApp.showToast('✅ Refleksi disimpan!');
+        });
+      }
     }
   },
 
