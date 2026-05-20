@@ -208,88 +208,13 @@ const slides = [
         }
       ];
 
-      // Teacher SVG (faithful to image.jpg — flat cartoon, blue PJPK shirt, navy pants)
-      const teacherSVG = `
-        <svg class="s3-character" viewBox="0 0 200 340" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Shadow -->
-          <ellipse cx="100" cy="334" rx="52" ry="7" fill="rgba(0,0,0,0.10)"/>
-
-          <!-- SHOES -->
-          <ellipse cx="76"  cy="322" rx="22" ry="10" fill="#111827"/>
-          <ellipse cx="124" cy="322" rx="22" ry="10" fill="#111827"/>
-
-          <!-- PANTS (navy) -->
-          <path d="M62 222 L138 222 L144 320 L118 320 L100 268 L82 320 L56 320 Z" fill="#1e3a8a"/>
-          <!-- Pants crease highlight -->
-          <path d="M100 240 L96 310" stroke="rgba(255,255,255,0.07)" stroke-width="2"/>
-
-          <!-- SHIRT body (blue PJPK) -->
-          <path d="M55 155 L145 155 L150 225 L50 225 Z" fill="#3b82f6"/>
-          <!-- Shirt highlight / sheen -->
-          <path d="M62 158 L78 222 L55 222 L55 165Z" fill="#60a5fa" opacity="0.4"/>
-
-          <!-- Collar (white V-neck) -->
-          <path d="M88 155 L100 175 L112 155 L105 150 L95 150Z" fill="white"/>
-
-          <!-- LEFT SLEEVE -->
-          <path d="M55 160 L28 195 L22 190 L20 210 L38 212 L55 185Z" fill="#2563EA"/>
-          <path d="M28 195 L22 190 L20 210 L38 212Z" fill="#1d4ed8"/>
-          <!-- Left arm lower -->
-          <path d="M20 208 L16 238 L30 240 L34 210Z" fill="#3b82f6"/>
-          <!-- Left hand -->
-          <ellipse cx="22" cy="242" rx="10" ry="8" fill="#fde8c8"/>
-
-          <!-- RIGHT SLEEVE -->
-          <path d="M145 160 L172 195 L178 190 L180 210 L162 212 L145 185Z" fill="#2563EA"/>
-          <path d="M172 195 L178 190 L180 210 L162 212Z" fill="#1d4ed8"/>
-          <!-- Right arm lower -->
-          <path d="M180 208 L184 238 L170 240 L166 210Z" fill="#3b82f6"/>
-          <!-- Right hand -->
-          <ellipse cx="178" cy="242" rx="10" ry="8" fill="#fde8c8"/>
-
-          <!-- Name badge -->
-          <rect x="88" y="185" width="26" height="16" rx="3" fill="#1e3a8a"/>
-          <rect x="90" y="187" width="22" height="12" rx="2" fill="#1d4ed8"/>
-
-          <!-- Watch on right wrist -->
-          <rect x="172" y="233" width="12" height="8" rx="2" fill="#374151"/>
-
-          <!-- NECK -->
-          <rect x="91" y="132" width="18" height="26" rx="8" fill="#fde8c8"/>
-
-          <!-- HEAD -->
-          <ellipse cx="100" cy="112" rx="38" ry="40" fill="#fde8c8"/>
-
-          <!-- HEAD shadow / chin -->
-          <ellipse cx="100" cy="148" rx="20" ry="6" fill="rgba(0,0,0,0.06)"/>
-
-          <!-- HAIR (black, side-parted flat style like image) -->
-          <path d="M64 100 C64 68 136 68 136 100 C130 80 118 72 100 72 C82 72 70 80 64 100Z" fill="#1c1917"/>
-          <!-- Hair side part -->
-          <path d="M64 100 C62 88 63 74 72 70 C67 75 64 88 64 100Z" fill="#1c1917"/>
-          <path d="M136 100 C138 88 137 74 128 70 C133 75 136 88 136 100Z" fill="#1c1917"/>
-          <!-- Hair top flat line -->
-          <rect x="68" y="72" width="64" height="8" rx="4" fill="#1c1917"/>
-
-          <!-- EYES -->
-          <ellipse cx="88"  cy="108" rx="6" ry="6.5" fill="white"/>
-          <ellipse cx="112" cy="108" rx="6" ry="6.5" fill="white"/>
-          <ellipse cx="89"  cy="109" rx="3.5" ry="4" fill="#1c1917"/>
-          <ellipse cx="113" cy="109" rx="3.5" ry="4" fill="#1c1917"/>
-          <!-- Eye shine -->
-          <circle cx="91" cy="107" r="1.2" fill="white"/>
-          <circle cx="115" cy="107" r="1.2" fill="white"/>
-
-          <!-- EYEBROWS -->
-          <path d="M82 100 C85 97 93 97 96 99" stroke="#1c1917" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-          <path d="M104 99 C107 97 115 97 118 100" stroke="#1c1917" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-
-          <!-- SMILE -->
-          <path d="M88 122 C93 130 107 130 112 122" stroke="#c2855a" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-          <!-- Cheek blush -->
-          <ellipse cx="80"  cy="120" rx="7" ry="4" fill="#fca5a5" opacity="0.3"/>
-          <ellipse cx="120" cy="120" rx="7" ry="4" fill="#fca5a5" opacity="0.3"/>
-        </svg>`;
+      // Real teacher photo
+      const teacherSVG = `<img
+        src="assets/cikgu-pjpk.jpg"
+        class="s3-character"
+        alt="Cikgu PJPK"
+        loading="eager"
+      />`;
 
       el.innerHTML = `
         <div class="s3-wrap">
