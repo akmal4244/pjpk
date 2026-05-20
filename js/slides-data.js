@@ -19,104 +19,100 @@ const slides = [
       el.className = "slide slide--intro-official active";
       el.dataset.anim = "fade";
 
-      // Jata Negara SVG (simplified official crest)
-      const jataSVG = `<svg class="s1-jata" viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Jata Negara Malaysia">
-        <!-- Shield body -->
-        <path d="M8 12 Q8 4 16 4 L64 4 Q72 4 72 12 L72 60 Q72 80 40 92 Q8 80 8 60 Z" fill="#CC0001"/>
-        <!-- Yellow crescent + star -->
-        <path d="M40 24 C32 24 26 30 26 38 C26 46 32 52 40 52 C48 52 54 46 54 38 C54 30 48 24 40 24Z" fill="none"/>
-        <path d="M34 30 C30 33 28 37 29 41 C30 46 35 50 40 50 C45 50 50 46 51 41" fill="#FFD700" stroke="#FFD700" stroke-width="0"/>
-        <path d="M29 40 C30 35 34 31 38 30 C33 29 26 33 24 39 C22 46 26 54 33 56" fill="#FFD700"/>
-        <!-- 14-point star simplified -->
-        <polygon points="40,16 41.5,21 46,21 42.5,24 44,29 40,26 36,29 37.5,24 34,21 38.5,21" fill="#FFD700"/>
-        <!-- Crescent -->
-        <path d="M36 35 C36 31 40 28 44 29 C40 28 37 31 37 35 C37 39 40 42 44 43 C40 44 36 41 36 37 Z" fill="none"/>
-        <path d="M34 36 C34 30 38 26 43 27 C38 26 33 30 33 36 C33 42 38 46 43 47 C38 47 34 43 34 37 Z" fill="#FFD700"/>
-        <!-- Bottom decorative strips -->
-        <rect x="12" y="62" width="14" height="6" rx="1" fill="#003F87"/>
-        <rect x="28" y="62" width="24" height="6" rx="1" fill="#FFD700"/>
-        <rect x="54" y="62" width="14" height="6" rx="1" fill="#CC0001"/>
-        <!-- White shield border -->
-        <path d="M8 12 Q8 4 16 4 L64 4 Q72 4 72 12 L72 60 Q72 80 40 92 Q8 80 8 60 Z" fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>
-      </svg>`;
-
       el.innerHTML = `
-        <!-- Dot grid decoration -->
+        <!-- Dot grid decoration top-left -->
         <div class="s1-dots" aria-hidden="true">
           ${Array(25).fill('<div class="s1-dot"></div>').join('')}
         </div>
 
-        <!-- Geometric right panel -->
+        <!-- Geometric chevron shapes (right side) -->
         <div class="s1-chevron-blue" aria-hidden="true"></div>
         <div class="s1-chevron-yellow" aria-hidden="true"></div>
 
-        <!-- Building illustration -->
+        <!-- Building illustration (right panel) -->
         <div class="s1-bldg-wrap" aria-hidden="true">
           <div class="s1-bldg-inner">
-            <svg viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-              <!-- Sky gradient -->
+            <svg viewBox="0 0 200 500" fill="none" xmlns="http://www.w3.org/2000/svg"
+                 style="width:100%;height:100%;display:block;">
               <defs>
-                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stop-color="#bfdbfe"/>
-                  <stop offset="100%" stop-color="#dbeafe"/>
+                  <stop offset="100%" stop-color="#93c5fd"/>
+                </linearGradient>
+                <linearGradient id="bldgG" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#1e3a8a"/>
+                  <stop offset="100%" stop-color="#1d4ed8"/>
                 </linearGradient>
               </defs>
-              <rect width="200" height="400" fill="url(#skyGrad)"/>
-              <!-- Building facade -->
-              <rect x="20" y="40" width="160" height="360" fill="#1e3a8a" opacity="0.85" rx="2"/>
-              <!-- Window grid -->
+              <!-- Sky -->
+              <rect width="200" height="500" fill="url(#skyG)"/>
+              <!-- Ground -->
+              <rect x="0" y="460" width="200" height="40" fill="#dbeafe"/>
+              <!-- Building body -->
+              <rect x="30" y="30" width="140" height="440" rx="2" fill="url(#bldgG)"/>
+              <!-- Roof ridge -->
+              <rect x="30" y="28" width="140" height="6" rx="1" fill="#1e40af"/>
+              <!-- Window grid: 5 cols x 16 rows -->
               ${(() => {
-                let wins = '';
-                for(let row=0; row<14; row++) {
-                  for(let col=0; col<5; col++) {
-                    const x = 28 + col * 30;
-                    const y = 55 + row * 26;
-                    const lit = Math.random() > 0.35;
-                    wins += `<rect x="${x}" y="${y}" width="18" height="14" rx="1" fill="${lit ? '#93c5fd' : '#1e40af'}" opacity="${lit ? '0.9' : '0.5'}"/>`;
+                let w = '';
+                const cols = 5, rows = 16;
+                const wW = 20, wH = 14, gX = 8, gY = 12;
+                const startX = 30 + (140 - cols*wW - (cols-1)*gX) / 2;
+                const startY = 48;
+                for(let r=0;r<rows;r++){
+                  for(let c=0;c<cols;c++){
+                    const x = startX + c*(wW+gX);
+                    const y = startY + r*(wH+gY);
+                    const lit = (r+c)%3 !== 0;
+                    w += `<rect x="${x.toFixed(1)}" y="${y}" width="${wW}" height="${wH}" rx="1"
+                      fill="${lit?'#93c5fd':'#1e40af'}" opacity="${lit?0.9:0.45}"/>`;
                   }
                 }
-                return wins;
+                return w;
               })()}
-              <!-- Ground -->
-              <rect x="0" y="370" width="200" height="30" fill="#1e3a8a" opacity="0.5"/>
+              <!-- Ground line -->
+              <rect x="10" y="468" width="180" height="3" rx="1" fill="#1e3a8a" opacity="0.3"/>
             </svg>
           </div>
         </div>
 
-        <!-- Main content -->
+        <!-- ════ MAIN CONTENT LEFT ════ -->
         <div class="s1-content">
-          <!-- Logo row -->
+
+          <!-- Logo: Jata Negara + KPM/BPK text -->
           <div class="s1-logo-row">
-            ${jataSVG}
-            <div class="s1-logo-text">Kementerian Pendidikan Malaysia<br/>Bahagian Pembangunan Kurikulum</div>
+            <img src="assets/jata-negara.jpg"
+                 class="s1-jata"
+                 alt="Jata Negara Malaysia — Kementerian Pendidikan / BPK"
+                 loading="eager" />
           </div>
 
           <!-- Divider -->
           <div class="s1-divider"></div>
 
-          <!-- Title -->
+          <!-- Title block -->
           <div class="s1-title-main">Penataran</div>
           <div class="s1-title-kp">Kurikulum Persekolahan 2027</div>
           <div class="s1-title-mp">Pendidikan Jasmani<br/>dan Pendidikan Kesihatan (PJPK)<br/>Tingkatan 1</div>
-          <div class="s1-modul-label">Pengenalan PJPK Tingkatan 1</div>
+          <div class="s1-modul-label">&#9632; Pengenalan PJPK Tingkatan 1</div>
 
-          <!-- CTA Button -->
+          <!-- CTA -->
           <button class="s1-btn" id="btn-mula-main">
-            <span class="s1-btn-icon">▶</span>
+            <span class="s1-btn-icon">&#9654;</span>
             Mula Sekarang
           </button>
 
+          <!-- Spacer pushes footer to bottom -->
           <div class="s1-spacer"></div>
 
-          <!-- Branding footer -->
+          <!-- Branding footer logos -->
           <div class="s1-footer-brands">
-            <span class="s1-brand-item s1-brand-item--hash">#kurikulumkita</span>
-            <span class="s1-brand-item s1-brand-item--red">Reformasi Pendidikan</span>
-            <span class="s1-brand-item s1-brand-item--green">Malaysia Madani</span>
-            <span class="s1-brand-item s1-brand-item--gold">Visit Malaysia 2026</span>
-            <span class="s1-brand-item s1-brand-item--purple">Generasi Madani</span>
+            <img src="assets/branding-footer.jpg"
+                 class="s1-footer-img"
+                 alt="Logo: #kurikulumkita, Reformasi Pendidikan, Malaysia Madani, Visit Malaysia 2026, Generasi Madani" />
           </div>
-          <div class="s1-nav-hint">Gunakan ← → atau swipe untuk navigasi</div>
+
+          <div class="s1-nav-hint">Gunakan &larr; &rarr; atau swipe untuk navigasi</div>
         </div>
       `;
       el.querySelector('#btn-mula-main').addEventListener('click', () => window.pjpkApp.goToSlide(2));
