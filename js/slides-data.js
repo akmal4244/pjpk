@@ -8,51 +8,115 @@ const slides = [
   {
     no: 1,
     type: "intro",
-    animation: "morph",
+    animation: "fade",
     title: "Penataran Kurikulum Persekolahan 2027",
     subtitle: "Pendidikan Jasmani dan Pendidikan Kesihatan (PJPK) Tingkatan 1",
     objective: "Memperkenalkan modul Penataran KP2027 PJPK Tingkatan 1 kepada peserta.",
     vo: "Selamat datang ke Penataran Pendidikan Jasmani dan Pendidikan Kesihatan Tingkatan 1. Modul interaktif ini akan memperkenalkan anda kepada Kurikulum Persekolahan 2027. Sila klik butang Mula untuk meneruskan.",
     interaction: ["Klik butang MULA untuk meneruskan"],
-    notes: "Slide pembuka modul. Butang Mula sahaja.",
+    notes: "Slide pembuka modul — reka bentuk rasmi BPK/KPM. Butang Mula sahaja.",
     render: function(el) {
-      el.className = "slide slide--intro active";
-      el.dataset.anim = "morph";
-      // Add floating particles
-      const particleColors = ['rgba(252,211,77,0.5)','rgba(255,255,255,0.3)','rgba(147,197,253,0.4)'];
-      let particles = '';
-      for(let i=0;i<12;i++){
-        const size = 4 + Math.random()*6;
-        const left = Math.random()*100;
-        const delay = Math.random()*8;
-        const dur = 6 + Math.random()*6;
-        const color = particleColors[Math.floor(Math.random()*3)];
-        particles += `<div class="particle" style="width:${size}px;height:${size}px;left:${left}%;bottom:${Math.random()*30}%;background:${color};animation-duration:${dur}s;animation-delay:${delay}s"></div>`;
-      }
+      el.className = "slide slide--intro-official active";
+      el.dataset.anim = "fade";
+
+      // Jata Negara SVG (simplified official crest)
+      const jataSVG = `<svg class="s1-jata" viewBox="0 0 80 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Jata Negara Malaysia">
+        <!-- Shield body -->
+        <path d="M8 12 Q8 4 16 4 L64 4 Q72 4 72 12 L72 60 Q72 80 40 92 Q8 80 8 60 Z" fill="#CC0001"/>
+        <!-- Yellow crescent + star -->
+        <path d="M40 24 C32 24 26 30 26 38 C26 46 32 52 40 52 C48 52 54 46 54 38 C54 30 48 24 40 24Z" fill="none"/>
+        <path d="M34 30 C30 33 28 37 29 41 C30 46 35 50 40 50 C45 50 50 46 51 41" fill="#FFD700" stroke="#FFD700" stroke-width="0"/>
+        <path d="M29 40 C30 35 34 31 38 30 C33 29 26 33 24 39 C22 46 26 54 33 56" fill="#FFD700"/>
+        <!-- 14-point star simplified -->
+        <polygon points="40,16 41.5,21 46,21 42.5,24 44,29 40,26 36,29 37.5,24 34,21 38.5,21" fill="#FFD700"/>
+        <!-- Crescent -->
+        <path d="M36 35 C36 31 40 28 44 29 C40 28 37 31 37 35 C37 39 40 42 44 43 C40 44 36 41 36 37 Z" fill="none"/>
+        <path d="M34 36 C34 30 38 26 43 27 C38 26 33 30 33 36 C33 42 38 46 43 47 C38 47 34 43 34 37 Z" fill="#FFD700"/>
+        <!-- Bottom decorative strips -->
+        <rect x="12" y="62" width="14" height="6" rx="1" fill="#003F87"/>
+        <rect x="28" y="62" width="24" height="6" rx="1" fill="#FFD700"/>
+        <rect x="54" y="62" width="14" height="6" rx="1" fill="#CC0001"/>
+        <!-- White shield border -->
+        <path d="M8 12 Q8 4 16 4 L64 4 Q72 4 72 12 L72 60 Q72 80 40 92 Q8 80 8 60 Z" fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>
+      </svg>`;
+
       el.innerHTML = `
-        ${particles}
-        <div class="intro-logo-ring">
-          <svg viewBox="0 0 56 56" fill="none" width="52" height="52">
-            <circle cx="28" cy="28" r="26" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
-            <rect x="16" y="18" width="24" height="3" rx="1.5" fill="white" opacity="0.9"/>
-            <rect x="16" y="25" width="24" height="3" rx="1.5" fill="white" opacity="0.9"/>
-            <rect x="16" y="32" width="16" height="3" rx="1.5" fill="white" opacity="0.9"/>
-            <circle cx="38" cy="35" r="7" fill="#FCD34D"/>
-            <path d="M35.5 35l2 2 3-3" stroke="#1e3a8a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        <!-- Dot grid decoration -->
+        <div class="s1-dots" aria-hidden="true">
+          ${Array(25).fill('<div class="s1-dot"></div>').join('')}
         </div>
-        <h1 class="intro-title">Penataran<br/>Kurikulum Persekolahan 2027</h1>
-        <p class="intro-sub">Pendidikan Jasmani dan Pendidikan Kesihatan (PJPK)<br/>Tingkatan 1</p>
-        <div class="intro-badges">
-          <span class="intro-badge">🏫 KPM</span>
-          <span class="intro-badge">📚 BPK</span>
-          <span class="intro-badge">🎓 Tingkatan 1</span>
-          <span class="intro-badge">⚽ PJPK</span>
-          <span class="intro-badge">30 Slide</span>
+
+        <!-- Geometric right panel -->
+        <div class="s1-chevron-blue" aria-hidden="true"></div>
+        <div class="s1-chevron-yellow" aria-hidden="true"></div>
+
+        <!-- Building illustration -->
+        <div class="s1-bldg-wrap" aria-hidden="true">
+          <div class="s1-bldg-inner">
+            <svg viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+              <!-- Sky gradient -->
+              <defs>
+                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#bfdbfe"/>
+                  <stop offset="100%" stop-color="#dbeafe"/>
+                </linearGradient>
+              </defs>
+              <rect width="200" height="400" fill="url(#skyGrad)"/>
+              <!-- Building facade -->
+              <rect x="20" y="40" width="160" height="360" fill="#1e3a8a" opacity="0.85" rx="2"/>
+              <!-- Window grid -->
+              ${(() => {
+                let wins = '';
+                for(let row=0; row<14; row++) {
+                  for(let col=0; col<5; col++) {
+                    const x = 28 + col * 30;
+                    const y = 55 + row * 26;
+                    const lit = Math.random() > 0.35;
+                    wins += `<rect x="${x}" y="${y}" width="18" height="14" rx="1" fill="${lit ? '#93c5fd' : '#1e40af'}" opacity="${lit ? '0.9' : '0.5'}"/>`;
+                  }
+                }
+                return wins;
+              })()}
+              <!-- Ground -->
+              <rect x="0" y="370" width="200" height="30" fill="#1e3a8a" opacity="0.5"/>
+            </svg>
+          </div>
         </div>
-        <button class="btn-mula" id="btn-mula-main">▶&nbsp; Mula Sekarang</button>
-        <div style="margin-top:16px;font-size:0.68rem;color:rgba(255,255,255,0.45);animation:fadeIn 0.6s 0.8s both;letter-spacing:0.04em">
-          Gunakan ← → atau swipe untuk navigasi
+
+        <!-- Main content -->
+        <div class="s1-content">
+          <!-- Logo row -->
+          <div class="s1-logo-row">
+            ${jataSVG}
+            <div class="s1-logo-text">Kementerian Pendidikan Malaysia<br/>Bahagian Pembangunan Kurikulum</div>
+          </div>
+
+          <!-- Divider -->
+          <div class="s1-divider"></div>
+
+          <!-- Title -->
+          <div class="s1-title-main">Penataran</div>
+          <div class="s1-title-kp">Kurikulum Persekolahan 2027</div>
+          <div class="s1-title-mp">Pendidikan Jasmani<br/>dan Pendidikan Kesihatan (PJPK)<br/>Tingkatan 1</div>
+          <div class="s1-modul-label">Pengenalan PJPK Tingkatan 1</div>
+
+          <!-- CTA Button -->
+          <button class="s1-btn" id="btn-mula-main">
+            <span class="s1-btn-icon">▶</span>
+            Mula Sekarang
+          </button>
+
+          <div class="s1-spacer"></div>
+
+          <!-- Branding footer -->
+          <div class="s1-footer-brands">
+            <span class="s1-brand-item s1-brand-item--hash">#kurikulumkita</span>
+            <span class="s1-brand-item s1-brand-item--red">Reformasi Pendidikan</span>
+            <span class="s1-brand-item s1-brand-item--green">Malaysia Madani</span>
+            <span class="s1-brand-item s1-brand-item--gold">Visit Malaysia 2026</span>
+            <span class="s1-brand-item s1-brand-item--purple">Generasi Madani</span>
+          </div>
+          <div class="s1-nav-hint">Gunakan ← → atau swipe untuk navigasi</div>
         </div>
       `;
       el.querySelector('#btn-mula-main').addEventListener('click', () => window.pjpkApp.goToSlide(2));

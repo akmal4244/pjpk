@@ -1022,3 +1022,267 @@ body::before {
   .vo-box          { display: none; }
   .slide-body      { gap: 5px; }
 }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 1 — OFFICIAL BPK/KPM INTRO LAYOUT
+   ═══════════════════════════════════════════════ */
+
+/* Override intro for slide 1 official */
+.slide--intro-official {
+  background: #ffffff;
+  color: #111;
+  align-items: stretch;
+  justify-content: stretch;
+  text-align: left;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Geometric right panel — blue/yellow chevron shapes */
+.s1-geo {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: clamp(140px, 38%, 420px);
+  pointer-events: none;
+  z-index: 0;
+}
+.s1-geo__img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+/* Blue chevron shape */
+.s1-chevron-blue {
+  position: absolute;
+  right: clamp(100px, 22%, 260px);
+  top: 0; bottom: 0;
+  width: clamp(70px, 18%, 200px);
+  background: #2563EA;
+  clip-path: polygon(25% 0%, 100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%);
+  z-index: 1;
+}
+/* Yellow chevron shape */
+.s1-chevron-yellow {
+  position: absolute;
+  right: clamp(50px, 10%, 130px);
+  top: 0; bottom: 0;
+  width: clamp(60px, 15%, 170px);
+  background: #F59E0B;
+  clip-path: polygon(25% 0%, 100% 0%, 75% 50%, 100% 100%, 25% 100%, 0% 50%);
+  z-index: 2;
+}
+/* Building photo in right panel */
+.s1-building {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: clamp(100px, 28%, 300px);
+  z-index: 3;
+  overflow: hidden;
+}
+.s1-building svg {
+  width: 100%; height: 100%;
+}
+
+/* Dot grid top-left decoration */
+.s1-dots {
+  position: absolute;
+  top: clamp(10px, 2vh, 20px);
+  left: clamp(10px, 2vw, 22px);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(3px, 0.6vw, 7px);
+  z-index: 5;
+  animation: fadeIn .5s .1s both;
+}
+.s1-dot {
+  width: clamp(4px, 0.7vw, 8px);
+  height: clamp(4px, 0.7vw, 8px);
+  border-radius: 50%;
+  background: #EF4444;
+  opacity: 0.85;
+}
+
+/* Content area — left side */
+.s1-content {
+  position: relative;
+  z-index: 10;
+  padding: clamp(10px, 2.5vh, 28px) clamp(12px, 3vw, 32px) clamp(10px, 2vh, 22px) clamp(12px, 3vw, 32px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: clamp(200px, 62%, 660px);
+}
+
+/* Logo row */
+.s1-logo-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(7px, 1.5vw, 14px);
+  margin-top: clamp(22px, 5vh, 46px);
+  animation: fadeIn .5s .05s both;
+}
+.s1-jata {
+  width: clamp(40px, 6vw, 68px);
+  height: auto;
+  flex-shrink: 0;
+}
+.s1-logo-text {
+  font-size: clamp(0.52rem, 1.1vh, 0.7rem);
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+
+/* Divider */
+.s1-divider {
+  width: clamp(32px, 6vw, 56px);
+  height: 2px;
+  background: linear-gradient(90deg, #2563EA, #F59E0B);
+  margin: clamp(6px, 1.2vh, 14px) 0;
+  border-radius: 2px;
+  animation: slideInDown .5s .15s both;
+}
+
+/* Title block */
+.s1-title-main {
+  font-size: clamp(1.05rem, 3.2vh, 2rem);
+  font-weight: 900;
+  color: #2563EA;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  animation: slideInDown .5s .2s both;
+  margin-bottom: clamp(2px, 0.4vh, 6px);
+}
+.s1-title-kp {
+  font-size: clamp(0.85rem, 2.5vh, 1.55rem);
+  font-weight: 900;
+  color: #EF4444;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  animation: slideInDown .5s .25s both;
+  margin-bottom: clamp(6px, 1.2vh, 14px);
+}
+.s1-title-mp {
+  font-size: clamp(0.72rem, 1.9vh, 1.1rem);
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  line-height: 1.35;
+  animation: slideInDown .5s .3s both;
+  margin-bottom: clamp(8px, 1.5vh, 18px);
+}
+.s1-modul-label {
+  font-size: clamp(0.72rem, 1.9vh, 1.05rem);
+  font-weight: 900;
+  color: #7C3AED;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  animation: slideInDown .5s .35s both;
+  margin-bottom: clamp(10px, 2vh, 22px);
+}
+
+/* Start button */
+.s1-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #2563EA 0%, #1d4ed8 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-lg);
+  padding: clamp(8px, 1.5vh, 13px) clamp(20px, 4vw, 36px);
+  font-size: clamp(0.78rem, 1.8vh, 0.96rem);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(37,99,234,.45);
+  transition: transform .2s var(--ease), box-shadow .2s;
+  font-family: var(--font);
+  letter-spacing: .03em;
+  animation: zoomIn .5s .45s both;
+  align-self: flex-start;
+}
+.s1-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 26px rgba(37,99,234,.55); }
+.s1-btn:active { transform: scale(0.97); }
+.s1-btn-icon {
+  width: clamp(16px, 2.5vh, 22px);
+  height: clamp(16px, 2.5vh, 22px);
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: clamp(0.6rem, 1.2vh, 0.78rem);
+}
+
+/* Spacer */
+.s1-spacer { flex: 1; }
+
+/* Branding footer */
+.s1-footer-brands {
+  display: flex;
+  align-items: center;
+  gap: clamp(6px, 1.5vw, 16px);
+  padding-top: clamp(6px, 1.2vh, 12px);
+  border-top: 1px solid rgba(0,0,0,0.07);
+  flex-wrap: wrap;
+  animation: fadeIn .5s .55s both;
+}
+.s1-brand-item {
+  font-size: clamp(0.5rem, 1vh, 0.65rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.s1-brand-item--hash { color: #2563EA; }
+.s1-brand-item--red  { color: #EF4444; }
+.s1-brand-item--green { color: #10B981; }
+.s1-brand-item--gold { color: #B45309; }
+.s1-brand-item--purple { color: #7C3AED; }
+
+/* Navigation hint */
+.s1-nav-hint {
+  font-size: clamp(0.52rem, 1vh, 0.63rem);
+  color: rgba(0,0,0,0.32);
+  letter-spacing: 0.04em;
+  margin-top: clamp(4px, 0.8vh, 8px);
+  animation: fadeIn .5s .65s both;
+}
+
+/* Building illustration (SVG placeholder) */
+.s1-bldg-wrap {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: clamp(130px, 32%, 340px);
+  z-index: 4;
+  overflow: hidden;
+}
+.s1-bldg-inner {
+  position: relative;
+  width: 100%; height: 100%;
+  background: linear-gradient(160deg, #dbeafe 0%, #bfdbfe 60%, #93c5fd 100%);
+  overflow: hidden;
+}
+
+/* Responsive tweaks */
+@media (max-width: 520px) {
+  .s1-chevron-blue  { right: clamp(80px,22%,180px); }
+  .s1-chevron-yellow{ right: clamp(38px,10%,90px); }
+  .s1-bldg-wrap     { width: clamp(80px, 25%, 180px); }
+  .s1-title-main    { font-size: clamp(0.95rem, 3vh, 1.5rem); }
+  .s1-dots          { display: none; }
+}
+@media (max-height: 500px) {
+  .s1-logo-row   { margin-top: 8px; }
+  .s1-divider    { display: none; }
+  .s1-modul-label{ display: none; }
+  .s1-footer-brands { display: none; }
+}
