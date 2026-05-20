@@ -1549,15 +1549,12 @@ body::before {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  /* Clip reflection — show only top 60% of photo (character, not mirror) */
-  overflow: hidden;
+  overflow: visible;
 }
 .s3-character {
-  /* Show top portion only — hides the floor reflection */
   width: 100%;
-  height: 160%;          /* taller than container */
-  object-fit: cover;
-  object-position: top center;
+  height: auto;
+  object-fit: contain;
   display: block;
   flex-shrink: 0;
   animation: zoomIn .6s .1s var(--ease) both;
