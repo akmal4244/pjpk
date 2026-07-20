@@ -1516,7 +1516,7 @@ function renderQuiz(el, slideData) {
             </button>
           `).join('')}
         </div>
-        <div id="quiz-result-${no}" class="quiz-result ${answered ? 'show' : ''} ${answered ? (window.pjpkStorage.getQuiz(no) ? 'correct' : 'wrong') : ''}">
+        <div id="quiz-result-${no}" class="quiz-result ${answered ? 'show' : ''} ${answered ? (window.pjpkStorage.getQuizCorrect(no) ? 'correct' : 'wrong') : ''}">
           ${answered
             ? (window.pjpkStorage.getQuizCorrect(no)
                 ? '✅ Jawapan betul! Syabas!'

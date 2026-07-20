@@ -56,6 +56,8 @@ window.pjpkApp = (function () {
       d.className = 'slide-dot';
       d.dataset.slide = i;
       d.title = `Slide ${i}`;
+      d.style.cursor = 'pointer';
+      d.addEventListener('click', () => goToSlide(i));
       wrap.appendChild(d);
     }
   }
